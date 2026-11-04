@@ -302,6 +302,14 @@
   </div>
 </div>
 
+<div class="modal" id="changeModal">
+  <div class="modal-box">
+    <div class="intro-title">📢 11월 주요 변경 사항</div>
+    <div class="intro-text"><b>1. 신인활동지원비</b>에 적용하는 수정보험료에서 <b>실손보험료 실적이 제외</b>됩니다.<br>그래서 <b>'당월 시책 인정 수정보험료'</b> 항목을 추가했으니 참고해주세요.<br><br><div style="background:#FFF6F8;border:1.5px solid #F5C2CC;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.7"><b>예시</b><br>· 당월 총 수정보험료 : <b>비례수수료, 13회차 성과 수수료</b> 계산 시 적용<br>· 당월 시책 인정 수정보험료 : <b>신인활동지원비</b> 계산 시 적용</div></div>
+    <div class="modal-actions"><button class="btn-save" id="changeClose">확인</button></div>
+  </div>
+</div>
+
 <div class="modal" id="maintModal">
   <div class="modal-box">
     <div class="intro-title">🔧 조직 정보를 업데이트 중입니다</div>
@@ -969,8 +977,12 @@ renderTabs();renderCalc();showCalc(false);
     try{localStorage.setItem(KEY,today);}catch(e){}
   }
 })();
-$('introClose').onclick=()=>$('introModal').classList.remove('show');
-$('introModal').addEventListener('click',e=>{if(e.target===$('introModal'))$('introModal').classList.remove('show');});
+const openChange=()=>{$('introModal').classList.remove('show');if(!changeShown){changeShown=true;$('changeModal').classList.add('show');}};
+let changeShown=false;
+$('introClose').onclick=openChange;
+$('introModal').addEventListener('click',e=>{if(e.target===$('introModal'))openChange();});
+$('changeClose').onclick=()=>$('changeModal').classList.remove('show');
+$('changeModal').addEventListener('click',e=>{if(e.target===$('changeModal'))$('changeModal').classList.remove('show');});
 $('maintClose').onclick=()=>$('maintModal').classList.remove('show');
 function showAlert(text,title){$('alertTitle').textContent=title||'⚠️ 확인해 주세요';$('alertText').innerHTML=text;$('alertModal').classList.add('show');}
 $('alertOk').onclick=()=>$('alertModal').classList.remove('show');
