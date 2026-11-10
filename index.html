@@ -385,9 +385,9 @@ const CALCS={
       const adjN=v.adjP-sS;
       const cS1=sS*0.042, cS7=sS*0.042*11+sS*0.069*3;
       const c1=seon?(pro?rd(adjN*1.667):rd(adjN*0.833)):(pro?rd(adjN*0.133):rd(adjN*0.074));
-      // ④ 신인 활동 지원비: 신인선지급형 한정(프로 제외) · 분급대상 포함 전체 수정P 기준
-      const c2=(seon&&!pro)?br(v.adjCert!==undefined?v.adjCert:v.adjP,LK.sinhwalbi):0;  // 신활비: 시책 인정 수정P 기준
-      // ③ 13회차 성과: 프로선지급형 한정
+      // ④ 신인 활동 지원비: 선지급형 · 1~12차월(P신인) · 시책 인정 수정P 기준
+      const c2=(seon&&!pro)?br(v.adjCert!==undefined?v.adjCert:v.adjP,LK.sinhwalbi):0;
+      // ③ 13회차 성과: 선지급형 · 13차월 이상(P프로)
       const c8=(seon&&pro)?br(adjN,LK.m13_pro):0;
       // 루키 시책(당월 합격만)
       const s1=(isDang&&v.meai==='충족')?br(v.mCert,LK.plat1):0;
@@ -411,8 +411,8 @@ const CALCS={
           {k:'① 장기 신계약 성과 수수료',s:seonLabel,v:c1},
           {k:'② 2~18회차 비례 수수료',s:'분급형 한정·매월',v:c5,pdetail:{adjP:adjN,rounded:false,segs:[[2,12,11,r1],[13,15,3,r2],[16,18,3,r3]],total:c5}},
           ...sRows,
-          {k:'③ 13회차 성과 수수료',s:'프로선지급형 한정 / 2차년도 지급',v:c8,detail:'m13_pro'},
-          {k:'④ 신인 활동 지원비',s:'신인선지급형 한정 · 시책 인정 수정P 기준',v:c2,detail:'sinhwalbi'},
+          {k:'③ 13회차 성과 수수료',s:'선지급형 · 13차월 이상(P프로) / 2차년도 지급',v:c8,detail:'m13_pro'},
+          {k:'④ 신인 활동 지원비',s:'선지급형 · 1~12차월(P신인) · 시책 인정 수정P 기준',v:c2,detail:'sinhwalbi'},
           {k:'⑤ 플랫폼 시책 #1',s:'당월 합격·MeAI',v:s1},
           {k:'⑥ 플랫폼 시책 #2',s:'당월 합격·이행보증',v:s2},
           {k:'⑦ 타사합격 1차월 시책',s:'타사 합격자·월납 기준·월말까지 이행보증가입 필요',v:spot},
