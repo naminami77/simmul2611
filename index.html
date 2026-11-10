@@ -446,7 +446,7 @@ const CALCS={
       const cS1=sS*0.042;                       // 1회차(익월)
       const cS7=sS*0.042*11+sS*0.069*3;         // 2~12회차 + 16~18회차 (13~15회차 미지급)
       const c1=seon?(pro?adjN*1.667:adjN*0.833):(pb?rd(adjN*0.133):rd(adjN*0.074));
-      const c2=(seon&&mon<=12)?br(v.adjCert!==undefined?v.adjCert:v.adjP,LK.sinhwalbi):0;  // 신활비: 시책 인정 수정P 기준(실손 제외)  // 신인활동지원비: 선지급·12차월까지 · 분급대상 포함 전체 수정P 기준
+      const c2=(seon&&!/P프로/.test(fee)&&mon<=12)?br(v.adjCert!==undefined?v.adjCert:v.adjP,LK.sinhwalbi):0;  // 신활비: 시책 인정 수정P 기준(실손 제외)  // 신인활동지원비: 선지급·12차월까지 · 분급대상 포함 전체 수정P 기준
       const s4=(act==='Active'&&v.mo==='충족')?br(v.mCert,LK.plat1):0;
       const s5=(act==='Active'&&v.consult==='충족')?br(v.mCert,LK.plat2):0;
       const s6=(act==='Chance'&&v.mo==='충족')?br(parseInt(v.regCount)||0,LK.coupon_chance):0;
@@ -455,7 +455,7 @@ const CALCS={
       const bn=v.bonus||0;
       nm+=cS1+bn;
       const c7=seon?0:((pb?rd(adjN*0.133):rd(adjN*0.074))*11+(pb?rd(adjN*0.142):rd(adjN*0.417))*3+(pb?rd(adjN*0.154):rd(adjN*0.458))*3);
-      const c8=(seon&&mon>=13)?br(adjN,LK.m13_pro):0;  // 13회차 성과: 선지급·13차월 이상
+      const c8=(seon&&(/P프로/.test(fee)||mon>=13))?br(adjN,LK.m13_pro):0;  // 13회차 성과: 선지급·13차월 이상
       const yr2=c8;
       const sRows=sS>0?[
         {k:'①-S 분급대상 1회차 비례 (기본형S)',s:'분급대상 수정P × 4.2%',v:cS1},
@@ -467,8 +467,8 @@ const CALCS={
           {k:'① 장기 신계약 성과 수수료',s:(seon?(pro?'수정P × 166.7%':'수정P × 83.3%'):(pb?'수정P × 13.3%':'수정P × 7.4%'))+(sS>0?' (분급대상 제외분)':''),v:c1},
           {k:'② 2~18회차 비례 수수료',s:'분급형 한정·매월',v:c7,pdetail:{adjP:adjN,rounded:true,segs:[[2,12,11,pb?0.133:0.074],[13,15,3,pb?0.142:0.417],[16,18,3,pb?0.154:0.458]],total:c7}},
           ...sRows,
-          {k:'③ 13회차 성과 수수료',s:'선지급형·13차월 이상 / 2차년도 지급',v:c8,detail:'m13_pro'},
-          {k:'④ 신인 활동 지원비',s:'선지급형·12차월까지 · 시책 인정 수정P 기준',v:c2,detail:'sinhwalbi'},
+          {k:'③ 13회차 성과 수수료',s:'P프로선지급형 또는 13차월 이상 / 2차년도 지급',v:c8,detail:'m13_pro'},
+          {k:'④ 신인 활동 지원비',s:'P신인선지급형·12차월까지 · 시책 인정 수정P 기준',v:c2,detail:'sinhwalbi'},
           {k:'⑤ 플랫폼 시책 #1',s:'Active·모바일 MeAI',v:s4},
           {k:'⑥ 플랫폼 시책 #2',s:'Active·가계약',v:s5},
           {k:'⑦ 플랫폼 시책 #1',s:'Chance·모바일 쿠폰(이마트 상품권)',v:s6},
