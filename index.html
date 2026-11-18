@@ -393,7 +393,7 @@ const CALCS={
       const s1=(isDang&&v.meai==='충족')?br(v.mCert,LK.plat1):0;
       const s2=(isDang&&seon)?br(v.pay9,LK.plat2):0;
       // 1차월 경력 스팟 시책(타사 합격만·4종 공통·월납 기준)
-      const spot=isTasa?br(v.m,LK.plat1):0;
+      const spot=isTasa?br(v.mCert,LK.plat1):0;  // 시책 인정 월납 기준
       // ② 2~18회차 비례(분급 한정): 신인 7.4/41.7/45.8, 프로 13.3/14.2/15.4
       const r1=pro?0.133:0.074, r2=pro?0.142:0.417, r3=pro?0.154:0.458;
       const c5=seon?0:(adjN*r1*11+adjN*r2*3+adjN*r3*3);
@@ -415,7 +415,7 @@ const CALCS={
           {k:'④ 신인 활동 지원비',s:'선지급형 · 1~12차월(P신인) · 시책 인정 수정P 기준',v:c2,detail:'sinhwalbi'},
           {k:'⑤ 플랫폼 시책 #1',s:'당월 합격·MeAI',v:s1},
           {k:'⑥ 플랫폼 시책 #2',s:'당월 합격·이행보증',v:s2},
-          {k:'⑦ 타사합격 1차월 시책',s:'타사 합격자·월납 기준·월말까지 이행보증가입 필요',v:spot},
+          {k:'⑦ 타사합격 1차월 시책',s:'타사 합격자·시책 인정 월납 기준·월말까지 이행보증가입 필요',v:spot},
           {k:'⑧ 특별 시상',s:'스팟성 시책 · 익월 지급',v:bn},
         ]};
     },
