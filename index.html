@@ -368,7 +368,7 @@ const CALCS={
       {id:'bond',type:'seg',label:'🛡️ 이행보증보험 가입',sm:'가입=선지급 · 미가입=분급',opts:['가입','미가입'],def:'가입'},
       {id:'track',type:'seg',label:'💰 수수료 유형',sm:'P신인=순수신인(1~12차월) · P프로=13차월 이상 / 경력',opts:['P신인','P프로'],def:'P신인'},
       {id:'meai',type:'seg',label:'📊 MeAI 보장분석',sm:'위촉 +3영업일',opts:['충족','미충족'],def:'충족'},
-      {id:'pay9',type:'num',label:'📅 응시 9영업일 이내 월납',sm:'플랫폼 시책 #2 기준',def:50000,group:'pay'},
+      {id:'pay9',type:'num',label:'📅 응시 9영업일 이내 시책 인정 월납',sm:'플랫폼 시책 #2 기준 · 실손/성공파트너/펫보험 재가입 등 제외',def:50000,group:'pay'},
       {id:'m',type:'num',label:'📅 당월 총 월납(N잡 실적 현황)',def:50000,group:'pay'},
       {id:'adjP',type:'num',label:'📅 당월 총 수정보험료(N잡 실적 현황)',def:120000,group:'pay'},
       {id:'mCert',type:'num',label:'📅 당월 시책 인정 월납',sm:'실손/성공파트너/펫보험 재가입 등 제외. 하단 \'시책 인정 기준\' 참고.',def:50000,group:'pay'},
@@ -391,7 +391,7 @@ const CALCS={
       const c8=(seon&&pro)?br(adjN,LK.m13_pro):0;
       // 루키 시책(당월 합격만)
       const s1=(isDang&&v.meai==='충족')?br(v.mCert,LK.plat1):0;
-      const s2=(isDang&&seon)?br(v.pay9,LK.plat2):0;
+      const s2=(isDang&&seon)?br(Math.min(v.pay9||0,v.mCert||0),LK.plat2):0;  // 9영업일 이내 시책 인정 월납(당월 인정 월납 초과 불가)
       // 1차월 경력 스팟 시책(타사 합격만·4종 공통·월납 기준)
       const spot=isTasa?br(v.mCert,LK.plat1):0;  // 시책 인정 월납 기준
       // ② 2~18회차 비례(분급 한정): 신인 7.4/41.7/45.8, 프로 13.3/14.2/15.4
@@ -414,13 +414,13 @@ const CALCS={
           {k:'③ 13회차 성과 수수료',s:'선지급형 · 13차월 이상(P프로) / 2차년도 지급',v:c8,detail:'m13_pro'},
           {k:'④ 신인 활동 지원비',s:'선지급형 · 1~12차월(P신인) · 시책 인정 수정P 기준',v:c2,detail:'sinhwalbi'},
           {k:'⑤ 플랫폼 시책 #1',s:'당월 합격·MeAI',v:s1},
-          {k:'⑥ 플랫폼 시책 #2',s:'당월 합격·이행보증',v:s2},
+          {k:'⑥ 플랫폼 시책 #2',s:'당월 합격·이행보증·9영업일 이내 시책 인정 월납 기준',v:s2},
           {k:'⑦ 타사합격 1차월 시책',s:'타사 합격자·시책 인정 월납 기준·월말까지 이행보증가입 필요',v:spot},
           {k:'⑧ 특별 시상',s:'스팟성 시책 · 익월 지급',v:bn},
         ]};
     },
     compare(st){return {header:'월납별 예상 수수료 예시(수정P = 월납의 2배 예상)',
-      cols:COLS.map(m=>({label:(m/10000)+'만',total:CALCS.N.compute({...st,m,pay9:m,adjP:m*P_MULT,adjCert:m*P_MULT}).total})),isAdjP:false};}
+      cols:COLS.map(m=>({label:(m/10000)+'만',total:CALCS.N.compute({...st,m,pay9:m,mCert:m,adjP:m*P_MULT,adjCert:m*P_MULT}).total})),isAdjP:false};}
   },
   E2:{title:'2차월 이상 경력',sub:'사번 조회 · 이행보증 가입 여부로 선지급/분급 판정',sabun:true,
     inputs:[
